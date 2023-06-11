@@ -1,10 +1,4 @@
-const fakeData = [
-    {
-        id: 1,
-        name: "João Oliveira",
-        job: "Desenvolvedor"
-    }
-]
+const fakeData = require('./fakeData.json'); // agora, usa o fakeData.json como fonte de dados
 
 const userDict = {};
 
