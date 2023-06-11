@@ -11,6 +11,8 @@ const getUser = ( req, res, next ) => {
             return res.send(data[i]);
         }
     }
+    // é necessário haver uma resposta definida para quando a query não é bem sucedida
+    return res.status(404).json({ error: "Usuário não encontrado" });
 };
 
 const getUsers = ( req, res, next ) => {
