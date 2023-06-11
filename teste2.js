@@ -23,5 +23,5 @@ module.exports = function (req, res) {
         }
 
     });
-    res.send(newUser);
+    res.status(201).json(newUser);
 };
