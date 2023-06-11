@@ -1,24 +1,25 @@
-var data =  require("./fakeData");
+const { userDict } = require("./fakeData");
 
-const getUser = ( req, res, next ) => {
-    
-    var name =  req.query.name;
-
-    for(let i = 0; i < data.length;  i++) {
-        // agora, a comparação é feita entre o termo de busca e cada um dos nomes dos usuários
-        // ou seja, entre req.query.name e data[i].name
-        if(data[i].name == name) {
-            return res.send(data[i]);
-        }
+const getUser = (req, res, next) => {
+    const name = req.query.name;
+    const user = userDict[name];
+    // A utilização de userDict melhora o desempenho das buscas, pois evita percorrer
+    // repetidamente todo o array fakeData. Agora, a consulta é feita diretamente pela 
+    // chave correspondente ao nome do usuário
+    // {
+    //  'João Oliveira': { id: 1, name: 'João Oliveira', job: 'Desenvolvedor' }
+    // }
+    if (user) {
+        return res.send(user);
     }
-    // é necessário haver uma resposta definida para quando a query não é bem sucedida
+
     return res.status(404).json({ error: "Usuário não encontrado" });
 };
 
-const getUsers = ( req, res, next ) => {
-    
+const getUsers = (req, res, next) => {
+
     res.send(data);
-    
+
 };
 
 module.exports = {
