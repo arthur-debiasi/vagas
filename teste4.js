@@ -1,13 +1,32 @@
-var data =  require("./fakeData");
+const { writeFile } = require('./utils/fileUtils');
 
-module.exports =  function(req, res) {
+var data = require("./fakeData").fakeData;
+
+module.exports = async function (req, res) {
+
+  const id = Number(req.query.id);
+
+  const index = data.findIndex((user) => user.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: "Usuário não encontrado." })
+  }
+  const user = {
+    "id": id,
+    "name": req.body.name,
+    "job": req.body.job,
+  };
   
-    var id =  req.query.id;
+  data[index] = user;
 
-    const reg = data.find(d => id == id);
-    reg.name = req.body.name;
-    reg.job = req.body.job;
+  const filePath = "./fakeData.json";
+  const fileContent = JSON.stringify(data);
 
-    res.send(reg);
+  try {
+    await writeFile(filePath, fileContent);
+    res.sendStatus(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao atualizar o usuário" });
+  }
 
 };
