@@ -1,4 +1,3 @@
-const fs = require("fs");
 const path = require("path");
 const { fakeData } = require("./fakeData");
 const { writeFile } = require("./utils/fileUtils");

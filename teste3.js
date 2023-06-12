@@ -1,4 +1,5 @@
 const data = require("./fakeData").fakeData;
+const path = require("path");
 const { writeFile } = require("./utils/fileUtils");
 
 module.exports = async function (req, res) {
@@ -14,7 +15,7 @@ module.exports = async function (req, res) {
   }
 
   if (deleted) {
-    const filePath = "./fakeData.json";
+    const filePath = path.join(__dirname, "fakeData.json");
     const fileContent = JSON.stringify(data);
 
     try {
