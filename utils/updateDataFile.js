@@ -1,7 +1,7 @@
 const fs = require("fs").promises;
 
 // Função para reescrever um arquivo
-const writeFile = async (filePath, content) => {
+const updateDataFile = async (filePath, content) => {
   try {
     await fs.writeFile(filePath, content);
   } catch (err) {
@@ -10,4 +10,4 @@ const writeFile = async (filePath, content) => {
   }
 };
 
-module.exports = { writeFile };
+module.exports = updateDataFile;

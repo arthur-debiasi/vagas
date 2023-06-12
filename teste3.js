@@ -1,6 +1,6 @@
-const data = require("./fakeData").fakeData;
+const data = require("./fakeData");
 const path = require("path");
-const { writeFile } = require("./utils/fileUtils");
+const updateDataFile = require("./utils/updateDataFile");
 
 module.exports = async function (req, res) {
   const name = req.query.name;
@@ -19,7 +19,7 @@ module.exports = async function (req, res) {
     const fileContent = JSON.stringify(data);
 
     try {
-      await writeFile(filePath, fileContent);
+      await updateDataFile(filePath, fileContent);
       res.sendStatus(204); // Retorna o status 204 No Content
     } catch (err) {
       res.status(500).json({ error: "Erro ao salvar o usuário" });

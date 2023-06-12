@@ -1,14 +1,14 @@
 const fakeData = require('./fakeData.json'); // agora, usa o fakeData.json como fonte de dados
 
-const userDict = {};
+// const userDict = {};
 
-fakeData.forEach((item) => userDict[item.name] = item);
+// fakeData.forEach((item) => userDict[item.name] = item);
 
-// Alterei a estrutura de dados para melhorar o desempenho das buscas
-// Foi criado um objeto "userDict", suas chaves são os
-// names dos users e os valores são os objetos dos users.
-// {
-//  'João Oliveira': { id: 1, name: 'João Oliveira', job: 'Desenvolvedor' }
-// }
+// // Alterei a estrutura de dados para melhorar o desempenho das buscas
+// // Foi criado um objeto "userDict", suas chaves são os
+// // names dos users e os valores são os objetos dos users.
+// // {
+// //  'João Oliveira': { id: 1, name: 'João Oliveira', job: 'Desenvolvedor' }
+// // }
 
-module.exports = { fakeData, userDict };
+module.exports = fakeData;

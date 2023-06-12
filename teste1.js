@@ -1,31 +1,33 @@
-const data = require("./fakeData").fakeData;
+const data = require("./fakeData");
 const path = require("path");
-const { writeFile } = require('./utils/fileUtils');
+const updateDataFile = require('./utils/updateDataFile');
 
 const getUser = async (req, res, next) => {
-    const userName = req.query.name;
-    const index = data.findIndex(({ name }) => name === userName);
+    const { name: userName } = req.query;
     // o findIndex não melhora desempenho, mas melhora legibilidade
+    const userIndex = data.findIndex(({ name }) => name === userName);
 
-    if(index === -1) {
+    // esta é a lógica para quando o usuário não é encontrado
+    if (userIndex === -1) {
         return res.status(404).json({ error: "Usuário não encontrado" });
     }
-    const user = data[index];
-    if(!user.access) {
+
+    // esta é a lógica para atualizar a contagem de acessos
+    const user = data[userIndex];
+    if (!user.access) {
         user.access = 1;
     } else {
         user.access += 1;
     }
-    data[index] = user;
+    data[userIndex] = user;
     const filePath = path.join(__dirname, "fakeData.json");
     const fileContent = JSON.stringify(data);
-    console.log(fileContent);
 
     try {
-        await writeFile(filePath, fileContent);
+        await updateDataFile(filePath, fileContent);
         return res.status(200).json(user);
     } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
         res.status(500).json({ error: "Erro interno" });
     }
 
