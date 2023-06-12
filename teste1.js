@@ -16,10 +16,8 @@ const getUser = (req, res, next) => {
     return res.status(404).json({ error: "Usuário não encontrado" });
 };
 
-const getUsers = (req, res, next) => {
-
-    res.send(data);
-
+const getUsers = (_req, res, _next) => {
+    return res.status(200).json(data);
 };
 
 module.exports = {
