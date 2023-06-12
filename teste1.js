@@ -1,19 +1,34 @@
-const { userDict } = require("./fakeData");
+const data = require("./fakeData").fakeData;
+const path = require("path");
+const { writeFile } = require('./utils/fileUtils');
 
-const getUser = (req, res, next) => {
-    const name = req.query.name;
-    const user = userDict[name];
-    // A utilização de userDict melhora o desempenho das buscas, pois evita percorrer
-    // repetidamente todo o array fakeData. Agora, a consulta é feita diretamente pela 
-    // chave correspondente ao nome do usuário
-    // {
-    //  'João Oliveira': { id: 1, name: 'João Oliveira', job: 'Desenvolvedor' }
-    // }
-    if (user) {
-        return res.send(user);
+const getUser = async (req, res, next) => {
+    const userName = req.query.name;
+    const index = data.findIndex(({ name }) => name === userName);
+    // o findIndex não melhora desempenho, mas melhora legibilidade
+
+    if(index === -1) {
+        return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+    const user = data[index];
+    if(!user.access) {
+        user.access = 1;
+    } else {
+        user.access += 1;
+    }
+    data[index] = user;
+    const filePath = path.join(__dirname, "fakeData.json");
+    const fileContent = JSON.stringify(data);
+    console.log(fileContent);
+
+    try {
+        await writeFile(filePath, fileContent);
+        return res.status(200).json(user);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).json({ error: "Erro interno" });
     }
 
-    return res.status(404).json({ error: "Usuário não encontrado" });
 };
 
 const getUsers = (_req, res, _next) => {
