@@ -1,8 +1,8 @@
-const data = require("./fakeData");
+const { userFakeData: data } = require("./data/fakeData");
 const path = require("path");
 const updateDataFile = require('./utils/updateDataFile');
 
-const getUser = async (req, res, next) => {
+const getUser = async (req, res, _next) => {
     const { name: userName } = req.query;
     // o findIndex não melhora desempenho, mas melhora legibilidade
     const userIndex = data.findIndex(({ name }) => name === userName);
@@ -20,7 +20,8 @@ const getUser = async (req, res, next) => {
         user.access += 1;
     }
     data[userIndex] = user;
-    const filePath = path.join(__dirname, "fakeData.json");
+    console.log(data);
+    const filePath = path.join(__dirname + '/data/', "userFakeData.json");
     const fileContent = JSON.stringify(data);
 
     try {

@@ -1,4 +1,4 @@
-const data = require("./fakeData");
+const { userFakeData: data } = require("./data/fakeData");
 
 module.exports = function (req, res) {
 

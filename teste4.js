@@ -1,6 +1,6 @@
+const path = require("path");
 const updateDataFile = require('./utils/updateDataFile');
-
-var data = require("./fakeData");
+const { userFakeData: data } = require("./data/fakeData");
 
 module.exports = async function (req, res) {
 
@@ -20,7 +20,7 @@ module.exports = async function (req, res) {
 
   data[userIndex] = user;
 
-  const filePath = "./fakeData.json";
+  const filePath = path.join(__dirname + '/data/', "userFakeData.json");
   const fileContent = JSON.stringify(data);
 
   try {
