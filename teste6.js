@@ -1,13 +1,22 @@
-const { generateJWT, decodeJWT } = require('./auth/jwt');
-const { loginFakeData } = require('./data/fakeData');
+const { comparePassword } = require('./auth/bcrypt');
+const { generateJWT } = require('./auth/jwt');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const { email: loginEmail, password: loginPassword } = req.body;
-  const { email: adminEmail, password: adminPassword } = loginFakeData;
+  const adminEmail = process.env.DB_USER;
+  const adminHash = process.env.DB_PASSWORD;
 
-  if (loginEmail !== adminEmail || loginPassword !== adminPassword) {
-    return res.status(404).json({ error: 'Usuário inválido' });
+  const validEmail = loginEmail === adminEmail;
+  const validPassword = await comparePassword(loginPassword, adminHash)
+
+  if (!validEmail) {
+    return res.status(401).json({ error: 'Invalid email.' });
   }
+
+  if (!validPassword) {
+    return res.status(401).json({ error: 'Invalid password.' });
+  }
+
 
   const payload = {
     email: loginEmail,

@@ -1,33 +1,32 @@
 const path = require("path");
-const updateDataFile = require('./utils/updateDataFile');
-const { userFakeData: data } = require("./data/fakeData");
+const { userFakeData: data } = require("./utils/data/fakeData");
+const { writeDataToFile } = require("./utils/fileUtils");
 
 module.exports = async function (req, res) {
-
   const id = Number(req.query.id);
 
   const userIndex = data.findIndex((user) => user.id === id);
 
   if (userIndex === -1) {
-    return res.status(404).json({ error: "Usuário não encontrado." })
+    return res.status(404).json({ error: "User not found" });
   }
-  const user = {
-    "id": id,
-    "name": req.body.name,
-    "job": req.body.job,
-    "access": data[userIndex].access
+
+  const { name, job } = req.body;
+
+  // se name e/ ou job não forem fornecidos em req.body, seus valores seguem os mesmos.
+  const updatedUser = {
+    ...data[userIndex],
+    name: name || data[userIndex].name,
+    job: job || data[userIndex].job,
   };
 
-  data[userIndex] = user;
-
-  const filePath = path.join(__dirname + '/data/', "userFakeData.json");
-  const fileContent = JSON.stringify(data);
+  data[userIndex] = updatedUser;
 
   try {
-    await updateDataFile(filePath, fileContent);
-    res.sendStatus(200).json(user);
+    await writeDataToFile(data);
+    return res.status(200).json(updatedUser);
   } catch (err) {
-    res.status(500).json({ error: "Erro ao atualizar o usuário" });
+    console.error("Error updating user:", err);
+    return res.status(500).json({ error: "Error updating user." });
   }
-
 };

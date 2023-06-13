@@ -1,27 +1,31 @@
-const path = require("path");
-const { userFakeData: data } = require("./data/fakeData");
-const updateDataFile = require("./utils/updateDataFile");
+const { userFakeData: data } = require("./utils/data/fakeData");
+const { writeDataToFile } = require("./utils/fileUtils");
+const getNextID = require('./utils/getNextID');
 
-module.exports = async function (req, res) {
-    const name = req.body.name;
-    const job = req.body.job;
+const createUser = async (req, res) => {
+    const { name, job } = req.body;
+
+    const existingUser = data.find((user) => user.name === name);
+
+    if (existingUser) {
+        return res.status(400).json({ error: 'User already exists.' });
+    }
 
     const newUser = {
-        id: data.length + 1,
-        name: name,
-        job: job,
+        id: getNextID(data), // garante que ids não se repetem
+        name,
+        job,
     };
 
     data.push(newUser);
 
-    const filePath = path.join(__dirname + '/data/', "userFakeData.json");
-    const fileContent = JSON.stringify(data);
-
     try {
-        await updateDataFile(filePath, fileContent);
-        res.sendStatus(204); // Retorna o status 204 No Content
-      } catch (err) {
-        console.error(err)
-        res.status(500).json({ error: "Erro ao salvar o usuário" });
-      }
+        await writeDataToFile(data);
+        return res.status(200).json(newUser);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Error saving user." });
+    }
 };
+
+module.exports = createUser;
