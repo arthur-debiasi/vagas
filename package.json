@@ -1,7 +1,7 @@
 {
   "name": "testedev",
   "version": "1.0.0",
-  "description": "This is a CRUD challenge.",
+  "description": "This is a user CRUD challenge.",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon .",
