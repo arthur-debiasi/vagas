@@ -63,7 +63,7 @@ O projeto possui um CRUD de Usuários que permite realizar operações básicas 
 
 Siga as instruções abaixo para instalar as dependências do projeto:
 
-1. Certifique-se de ter o Node.js instalado em seu sistema. Você pode fazer o download e instalação do Node.js em [nodejs.org](httptts://nodejs.org).
+1. Certifique-se de ter o Node.js instalado em seu sistema. Você pode fazer o download e instalação do Node.js em [nodejs.org](https://nodejs.org).
 
 2. Clone o repositório do projeto para o seu diretório local:
 
