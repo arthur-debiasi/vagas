@@ -2,6 +2,7 @@ const { writeDataToFile, readDataFromFile } = require("./utils/fileUtils");
 const getNextID = require('./utils/getNextID');
 
 const createUser = async (req, res) => {
+    try {
     const data = await readDataFromFile();
     const { name, job } = req.body;
 
@@ -19,7 +20,6 @@ const createUser = async (req, res) => {
 
     data.push(newUser);
 
-    try {
         await writeDataToFile(data);
         return res.status(200).json(newUser);
     } catch (err) {
