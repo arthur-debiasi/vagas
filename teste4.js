@@ -1,8 +1,7 @@
-const path = require("path");
-const { userFakeData: data } = require("./utils/data/fakeData");
-const { writeDataToFile } = require("./utils/fileUtils");
+const { writeDataToFile, readDataFromFile } = require("./utils/fileUtils");
 
-module.exports = async function (req, res) {
+const updateUserByID = async (req, res) => {
+  const data = await readDataFromFile();
   const id = Number(req.query.id);
 
   const userIndex = data.findIndex((user) => user.id === id);
@@ -30,3 +29,5 @@ module.exports = async function (req, res) {
     return res.status(500).json({ error: "Error updating user." });
   }
 };
+
+module.exports = updateUserByID;

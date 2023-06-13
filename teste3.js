@@ -1,6 +1,6 @@
 const { writeDataToFile, readDataFromFile } = require("./utils/fileUtils");
 
-module.exports = async function (req, res) {
+const deleteUser = async (req, res) => {
   const data = await readDataFromFile();
   const userName = req.query.name;
 
@@ -18,3 +18,5 @@ module.exports = async function (req, res) {
     return res.status(500).json({ error: "Error saving user." });
   }
 };
+
+module.exports = deleteUser;

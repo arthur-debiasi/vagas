@@ -1,7 +1,7 @@
-const { userFakeData: data } = require("./utils/data/fakeData");
-
-module.exports = function (req, res) {
+const { readDataFromFile } = require('./utils/fileUtils');
+const getAccessCount = async (req, res) => {
   const userName = req.query.name;
+  const data = await readDataFromFile();
 
   try {
     const user = data.find(({ name }) => name === userName);
@@ -18,3 +18,5 @@ module.exports = function (req, res) {
     return res.status(500).json({ error: "Error fetching user." });
   }
 };
+
+module.exports = getAccessCount;

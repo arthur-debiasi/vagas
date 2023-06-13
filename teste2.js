@@ -1,8 +1,8 @@
-const { userFakeData: data } = require("./utils/data/fakeData");
-const { writeDataToFile } = require("./utils/fileUtils");
+const { writeDataToFile, readDataFromFile } = require("./utils/fileUtils");
 const getNextID = require('./utils/getNextID');
 
 const createUser = async (req, res) => {
+    const data = await readDataFromFile();
     const { name, job } = req.body;
 
     const existingUser = data.find((user) => user.name === name);

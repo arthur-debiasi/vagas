@@ -1,7 +1,7 @@
 const { comparePassword } = require('./auth/bcrypt');
 const { generateJWT } = require('./auth/jwt');
 
-module.exports = async (req, res) => {
+const login = async (req, res) => {
   const { email: loginEmail, password: loginPassword } = req.body;
   const adminEmail = process.env.DB_USER;
   const adminHash = process.env.DB_PASSWORD;
@@ -26,3 +26,5 @@ module.exports = async (req, res) => {
 
   res.status(200).json({ token });
 }
+
+module.exports = login;
