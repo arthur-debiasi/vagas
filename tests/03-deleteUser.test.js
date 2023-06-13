@@ -3,25 +3,24 @@ const { readDataFromFile, writeDataToFile } = require('../utils/fileUtils');
 
 jest.mock('../utils/fileUtils');
 
-describe('deleteUser', () => {
+describe('Testando deleteUser', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  test('should delete the user and return status 204', async () => {
-    // Set up mock data and request query
-    const data = [
-      { id: 1, name: 'Alice', job: 'Engineer' },
-      { id: 2, name: 'Bob', job: 'Developer' },
-      { id: 3, name: 'Charlie', job: 'Designer' },
-    ];
-    const req = { query: { name: 'Bob' } };
+  test('deve deletar um usuário com sucesso e responder com status 204', async () => {
 
-    // Configure the necessary function mocks
+    const data = [
+      { id: 1, name: 'Cecilia Jardim', job: 'Engenheira' },
+      { id: 2, name: 'João Alves', job: 'CEO' },
+      { id: 3, name: 'Giuliano Petry', job: 'Desenvolvedor' },
+    ];
+    const req = { query: { name: 'Giuliano Petry' } };
+
+    // Configurando as funções que precisam ser mockadas em deleteUser
     readDataFromFile.mockResolvedValue(data);
     writeDataToFile.mockResolvedValue();
 
-    // Call the deleteUser function
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -30,31 +29,29 @@ describe('deleteUser', () => {
 
     await deleteUser(req, res);
 
-    // Check the response
+    // Verificando a Resposta
     expect(res.sendStatus).toHaveBeenCalledWith(204);
 
-    // Check that the necessary functions were called
+    // Verificando se as funções mockadas foram chamadas
     expect(readDataFromFile).toHaveBeenCalledTimes(1);
     expect(writeDataToFile).toHaveBeenCalledTimes(1);
     expect(writeDataToFile).toHaveBeenCalledWith([
-      { id: 1, name: 'Alice', job: 'Engineer' },
-      { id: 3, name: 'Charlie', job: 'Designer' },
+      { id: 1, name: 'Cecilia Jardim', job: 'Engenheira' },
+      { id: 2, name: 'João Alves', job: 'CEO' },
     ]);
   });
 
-  test('should return an error if the user is not found', async () => {
-    // Set up mock data and request query
-    const data = [
-      { id: 1, name: 'Alice', job: 'Engineer' },
-      { id: 2, name: 'Bob', job: 'Developer' },
-      { id: 3, name: 'Charlie', job: 'Designer' },
-    ];
-    const req = { query: { name: 'Eve' } };
+  test('deve retornar um erro quando o usuário não existir', async () => {
 
-    // Configure the necessary function mocks
+    const data = [
+      { id: 1, name: 'Vitória Galvão', job: 'Recursos Humanos' },
+      { id: 2, name: 'Lucas Bernardo', job: 'Advogado' },
+      { id: 3, name: 'Gabriel Coelho', job: 'Desenvolvedor' },
+    ];
+    const req = { query: { name: 'Raisa Barreto' } };
+
     readDataFromFile.mockResolvedValue(data);
 
-    // Call the deleteUser function
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -62,23 +59,19 @@ describe('deleteUser', () => {
 
     await deleteUser(req, res);
 
-    // Check the response
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({ error: 'User not found' });
 
-    // Check that the necessary functions were called
     expect(readDataFromFile).toHaveBeenCalledTimes(1);
     expect(writeDataToFile).not.toHaveBeenCalled();
   });
 
-  test('should return an error if there is an error saving the user', async () => {
-    // Set up mock data and request query
-    const req = { query: { name: 'Bob' } };
+  test('deve retornar um erro quando houver um erro interno ao deletar um usuário', async () => {
 
-    // Configure the necessary function mocks
+    const req = { query: { name: 'Roberto Gargamel' } };
+
     readDataFromFile.mockRejectedValue(new Error('Some error'));
 
-    // Call the deleteUser function
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -86,11 +79,9 @@ describe('deleteUser', () => {
 
     await deleteUser(req, res);
 
-    // Check the response
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: 'Error deleting user.' });
 
-    // Check that the necessary functions were called
     expect(readDataFromFile).toHaveBeenCalledTimes(1);
     expect(writeDataToFile).toHaveBeenCalledTimes(0);
   });
