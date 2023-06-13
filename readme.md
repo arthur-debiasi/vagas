@@ -1,3 +1,7 @@
+<details>
+  <summary><h1>Instruções do desafio</h1></summary>
+
+
 # Este é um teste para desenvolvedores
 
 # possui 5 testes
@@ -41,3 +45,4 @@ Retorne quantas vezes determinado usuário foi lido no teste1.
 
 Definina uma forma de criar permissão para o usuario, defina se o usuário pode deletar ou atualizar usuários. Crie um middleware para validar essas permissões e adicione no teste4 e teste3.
 
+</details>
