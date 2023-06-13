@@ -1,4 +1,4 @@
-const { getUser } = require('../teste1');
+const { getUser, getUsers } = require('../teste1');
 const { readDataFromFile, writeDataToFile } = require('../utils/fileUtils');
 const { findUserByName } = require('../utils/findUserByName');
 
@@ -90,4 +90,41 @@ describe('getUser', () => {
 
   });
 
+});
+
+describe('getUsers', () => {
+  test('deve retornar os dados dos usuários com status 200', async () => {
+    // Mock da função readDataFromFile
+    const mockUserData = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }];
+    readDataFromFile.mockResolvedValue(mockUserData);
+
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await getUsers(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(mockUserData);
+  });
+
+  test('deve retornar um erro interno com status 500 em caso de falha na leitura do arquivo', async () => {
+    // Mock da função readDataFromFile para simular erro
+    const errorMessage = 'Erro na leitura do arquivo';
+    readDataFromFile.mockRejectedValue(new Error(errorMessage));
+
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await getUsers(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Erro interno' });
+    expect(console.error).toHaveBeenCalledWith(errorMessage);
+  });
 });
