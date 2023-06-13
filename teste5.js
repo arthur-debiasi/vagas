@@ -1,9 +1,9 @@
 const { readDataFromFile } = require('./utils/fileUtils');
 const getAccessCount = async (req, res) => {
+  try {
   const userName = req.query.name;
   const data = await readDataFromFile();
 
-  try {
     const user = data.find(({ name }) => name === userName);
 
     if (!user) {
